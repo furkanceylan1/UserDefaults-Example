@@ -83,31 +83,36 @@ class ViewController: UIViewController {
             resultLabel.text = "Name : \(nameTextField.text!)"
             birthLabel.text = "Birth Day : \(birthTextField.text!)"
             
-            let alertMesage = UIAlertController(title: "Successful", message: "Registration Successful", preferredStyle: UIAlertController.Style.alert)
-            let okButton = UIAlertAction(title: "Ok", style: UIAlertAction.Style.default){ alertMesage in
-                
-            }
-            alertMesage.addAction(okButton)
-            self.present(alertMesage, animated: true, completion: nil)
+            alertMessage(title: "Successful", message: "Registration Successful", buttonTitle: "OK")
+            
         }else{
-            let alertMesage = UIAlertController(title: "Eror", message: "Please enter data", preferredStyle: UIAlertController.Style.alert)
-            let okButton = UIAlertAction(title: "Ok", style: UIAlertAction.Style.default){ alertMesage in
-                
-            }
-            alertMesage.addAction(okButton)
-            self.present(alertMesage, animated: true, completion: nil)
+            alertMessage(title: "Eror", message: "Please enter data", buttonTitle: "OK")
         }
-        
-        
         
     }
     
     @objc func deleteClick(){
-        UserDefaults.standard.removeObject(forKey: "userName")
-        UserDefaults.standard.removeObject(forKey: "userBirthDay")
         
-        resultLabel.text = "Name : "
-        birthLabel.text = "Birth Day : "
+        if UserDefaults.standard.object(forKey: "userName") as? String != nil{
+            UserDefaults.standard.removeObject(forKey: "userName")
+            resultLabel.text = "Name : "
+        }else{
+            alertMessage(title: "Warning", message: "The object to be deleted was not found.", buttonTitle: "OK")
+        }
+        
+        if UserDefaults.standard.object(forKey: "userBirthDay") as? String != nil{
+            UserDefaults.standard.removeObject(forKey: "userBirthDay")
+            birthLabel.text = "Birth Day : "
+        }else{
+            alertMessage(title: "Warning", message: "The object to be deleted was not found.", buttonTitle: "OK")
+        }
+    }
+    
+    @objc func alertMessage(title : String, message : String, buttonTitle : String){
+        let alertMessage = UIAlertController.init(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        let okButton = UIAlertAction.init(title: buttonTitle, style: UIAlertAction.Style.default)
+        alertMessage.addAction(okButton)
+        self.present(alertMessage, animated: true, completion: nil)
     }
 
 
